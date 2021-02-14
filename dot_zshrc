@@ -1,0 +1,230 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+unsetopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/sabit/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# Alias
+alias acpi='acpi -i'
+alias caps2ctrl='sudo loadkeys /usr/share/keymaps/caps2ctrl.map'
+alias caps2ctrloff='sudo loadkeys -d'
+alias caps2ctrlx="setxkbmap -option 'ctrl:nocaps'"
+alias caps2ctrlxoff='setxkbmap -option'
+alias cd..='cd ..'
+alias cdold='cd $OLDPWD'
+alias cz='chezmoi'
+alias fd='fd -H'
+alias df='df -h'
+alias diff='diff --color=auto'
+alias free='free -h'
+alias ga='git add'
+alias gs='git status'
+alias gl='git log'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias grep='grep --color=auto'
+alias iotop='sudo iotop'
+alias jqc='jq -C'
+alias lessc='less -RFX'
+alias ls='exa'
+alias lsa='exa -a'
+alias lsl='exa -ls newest'
+alias lsla='exa -las newest'
+alias lsp='find $PWD -maxdepth 1 ! -path $PWD'
+alias lswcl='ls | wc -l'
+alias nnn='nnn -dco'
+alias piplotpng='gnuplot -e "set terminal png; plot \"-\" with lines"'
+alias rgc='rg -p'
+alias startx='startx -- -keeptty > ~/.xorg.log 2>&1'
+alias suspended='systemctl suspend'
+alias ssa='ss -plat'
+alias tslen='gtranslate -s en -t id'
+alias tslid='gtranslate -s id -t en'
+alias ubup='nmcli c up VPN\ UB'
+alias ubdown='nmcli c down VPN\ UB'
+alias uptime='uptime -p'
+alias wcl='wc -l'
+alias wlc='wl-copy'
+alias wlp='wl-paste'
+alias yay='PKGEXT=.pkg.tar yay'
+alias zcalc='zcalc -f'
+
+# autoload zcalc
+autoload -Uz zcalc
+
+# Autosuggest zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# fzf zsh completion
+source /usr/share/fzf/completion.zsh
+
+# fzf zsh keybindings
+# source /usr/share/fzf/key-bindings.zsh
+
+# mcfly zsh bindings
+source /usr/share/doc/mcfly/mcfly.zsh
+
+# User defined keymaps
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[H" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[8~" end-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[3~" delete-char
+bindkey "^[ " autosuggest-accept
+bindkey "^[^M" autosuggest-execute
+
+# Fzf completion keybindings
+bindkey '^I' $fzf_default_completion
+bindkey '^[i' fzf-completion
+
+# Case-insensitive autocomplete
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# Insert slash on special-dirs autocomplete
+zstyle ':completion:*' special-dirs true
+
+# Prompt shell
+if [ "$TAB" = "" ]
+then
+    PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f %# '
+else
+    setopt prompt_subst
+    PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f%F{red}:$TAB%f %# '
+fi
+
+# XDG config home
+export XDG_CONFIG_HOME="$HOME/.config/"
+
+# Export additional path
+export PATH=$PATH:/home/sabit/go/bin:~/.local/bin:~/.gem/ruby/2.7.0/bin
+
+# Unset fzf completion trigger
+export FZF_COMPLETION_TRIGGER=''
+
+# Export editor variable
+export EDITOR=vim
+
+# Use sccache for build artifacts
+export RUSTC_WRAPPER=/usr/bin/sccache
+
+# Additional function
+man() {
+    LESS_TERMCAP_md=$'\e[01;31m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    command man "$@"
+}
+
+_systemctl_unit_state() {
+  typeset -gA _sys_unit_state
+  _sys_unit_state=( $(__systemctl list-unit-files "$PREFIX*" | awk '{print $1, $2}') ) }
+
+proxyon() {
+    export HTTP_PROXY='127.0.0.1:8080'
+    export HTTPS_PROXY='127.0.0.1:8080'
+}
+
+proxyoff() {
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+}
+
+# zoxide init shell
+eval "$(zoxide init zsh)"
+
+# execute navi as Ctrl-G from shell
+# source <(echo "$(navi widget zsh)")
+
+_call_navi() {
+  local selected
+  if [ -n "$LBUFFER" ]; then
+    if selected="$(printf "%s" "$(navi --print --fzf-overrides '--no-select-1' --query "${LBUFFER}" </dev/tty)")"; then
+      LBUFFER="$selected"
+    fi
+  else
+    if selected="$(printf "%s" "$(navi --print </dev/tty)")"; then
+      LBUFFER="$selected"
+    fi
+  fi
+  zle redisplay
+}
+
+zle -N _call_navi
+
+bindkey '^g' _call_navi
+
+##### end of navi config #####
+
+# tab multiplexer configuration: https://github.com/austinjones/tab-rs/
+# source /home/sabit/.tab/completion/zsh-history.zsh
+# end tab configuration
+
+# tab-rs key binding
+alacritty_instance=$(pgrep alacritty | wc -l)
+bindkey -s '^[1' "^Qtab $alacritty_instance/1^J"
+bindkey -s '^[2' "^Qtab $alacritty_instance/2^J"
+bindkey -s '^[3' "^Qtab $alacritty_instance/3^J"
+bindkey -s '^[4' "^Qtab $alacritty_instance/4^J"
+bindkey -s '^[5' "^Qtab $alacritty_instance/5^J"
+bindkey -s '^[6' "^Qtab $alacritty_instance/6^J"
+bindkey -s '^[7' "^Qtab $alacritty_instance/7^J"
+bindkey -s '^[8' "^Qtab $alacritty_instance/8^J"
+bindkey -s '^[9' "^Qtab $alacritty_instance/9^J"
+bindkey -s '^[0' "^Qtab $alacritty_instance/0^J"
+
+# nnn bookmark list
+export NNN_BMS='c:~/.config;d:~/Downloads/;a:/home/sabit/Remote/Android/storage/emulated/0;r:/home/sabit/Remote'
+
+# nnn quitcd function
+n ()
+{
+    # Block nesting of nnn in subshells
+    if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
+        echo "nnn is already running"
+        return
+    fi
+
+    # The default behaviour is to cd on quit (nnn checks if NNN_TMPFILE is set)
+    # To cd on quit only on ^G, remove the "export" as in:
+    #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    # NOTE: NNN_TMPFILE is fixed, should not be modified
+    NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+
+    # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+    # stty start undef
+    # stty stop undef
+    # stty lwrap undef
+    # stty lnext undef
+
+    nnn "$@"
+
+    if [ -f "$NNN_TMPFILE" ]; then
+            . "$NNN_TMPFILE"
+            rm -f "$NNN_TMPFILE" > /dev/null
+    fi
+}
+
+# nnn plugin configuration
+export NNN_PLUG='a:autojump;b:bookmarks'
+
+# Configure wordchars to exclude some non-alphanumeric as word
+WORDCHARS='.-_'
+
+# Youtube Search and Player with mpv
+function yta() {
+    # echo ytdl://ytsearch"$1":"${*:2}"
+    mpv --ytdl-format=bestaudio ytdl://ytsearch"$1":"${*:2}"
+}
