@@ -1,18 +1,29 @@
-# Lines configured by zsh-newuser-install
+# ===============================================================
+# zsh setup and initialization                                  =
+# ===============================================================
+
+# lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 unsetopt beep
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
+# end of lines configured by zsh-newuser-install
+# the following lines were added by compinstall
 zstyle :compinstall filename '/home/sabit/.zshrc'
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
+# end of lines added by compinstall
 
-# Alias
+# autoload zcalc
+autoload -Uz zcalc
+
+# ===============================================================
+# zsh alias                                                     =
+# ===============================================================
+
+# user defined alias
 alias acpi='acpi -i'
 alias caps2ctrl='sudo loadkeys /usr/share/keymaps/caps2ctrl.map'
 alias caps2ctrloff='sudo loadkeys -d'
@@ -21,15 +32,15 @@ alias caps2ctrlxoff='setxkbmap -option'
 alias cd..='cd ..'
 alias cdold='cd $OLDPWD'
 alias cz='chezmoi'
-alias fd='fd -H'
 alias df='df -h'
 alias diff='diff --color=auto'
+alias fd='fd -H'
 alias free='free -h'
 alias ga='git add'
-alias gs='git status'
-alias gl='git log'
 alias gc='git commit'
 alias gcm='git commit -m'
+alias gl='git log'
+alias gs='git status'
 alias grep='grep --color=auto'
 alias iotop='sudo iotop'
 alias jqc='jq -C'
@@ -41,15 +52,16 @@ alias lsla='exa -las newest'
 alias lsp='find $PWD -maxdepth 1 ! -path $PWD'
 alias lswcl='ls | wc -l'
 alias nnn='nnn -dco'
+alias paru='PKGEXT=.pkg.tar paru'
 alias piplotpng='gnuplot -e "set terminal png; plot \"-\" with lines"'
 alias rgc='rg -p'
+alias ssa='ss -plat'
 alias startx='startx -- -keeptty > ~/.xorg.log 2>&1'
 alias suspended='systemctl suspend'
-alias ssa='ss -plat'
 alias tslen='gtranslate -s en -t id'
 alias tslid='gtranslate -s id -t en'
-alias ubup='nmcli c up VPN\ UB'
 alias ubdown='nmcli c down VPN\ UB'
+alias ubup='nmcli c up VPN\ UB'
 alias uptime='uptime -p'
 alias wcl='wc -l'
 alias wlc='wl-copy'
@@ -57,22 +69,30 @@ alias wlp='wl-paste'
 alias yay='PKGEXT=.pkg.tar yay'
 alias zcalc='zcalc -f'
 
-# autoload zcalc
-autoload -Uz zcalc
+# ===============================================================
+# zsh source import                                             =
+# ===============================================================
 
-# Autosuggest zsh
+# zsh autosuggestions
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # fzf zsh completion
 source /usr/share/fzf/completion.zsh
 
-# fzf zsh keybindings
-# source /usr/share/fzf/key-bindings.zsh
-
 # mcfly zsh bindings
 source /usr/share/doc/mcfly/mcfly.zsh
 
-# User defined keymaps
+# execute navi as Ctrl-G from shell
+source <(navi widget zsh)
+
+# zoxide init shell
+source <(zoxide init zsh)
+
+# ===============================================================
+# zsh user bindkey                                              =
+# ===============================================================
+
+# terminal-specific keybindings
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[H" beginning-of-line
@@ -83,42 +103,57 @@ bindkey "^[[3~" delete-char
 bindkey "^[ " autosuggest-accept
 bindkey "^[^M" autosuggest-execute
 
-# Fzf completion keybindings
+# fzf completion keybindings
 bindkey '^I' $fzf_default_completion
 bindkey '^[i' fzf-completion
 
-# Case-insensitive autocomplete
+# ===============================================================
+# zsh zstyle settings                                           =
+# ===============================================================
+
+# case-insensitive autocomplete
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-# Insert slash on special-dirs autocomplete
+# insert slash on special-dirs autocomplete
 zstyle ':completion:*' special-dirs true
 
-# Prompt shell
-if [ "$TAB" = "" ]
-then
-    PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f %# '
-else
-    setopt prompt_subst
-    PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f%F{red}:$TAB%f %# '
-fi
+# ===============================================================
+# zsh environment variable                                      =
+# ===============================================================
 
-# XDG config home
+# prompt shell
+PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f %# '
+
+# xDG config home
 export XDG_CONFIG_HOME="$HOME/.config/"
 
-# Export additional path
+# export additional path
 export PATH=$PATH:/home/sabit/go/bin:~/.local/bin:~/.gem/ruby/2.7.0/bin
 
-# Unset fzf completion trigger
+# unset fzf completion trigger
 export FZF_COMPLETION_TRIGGER=''
 
-# Export editor variable
+# export editor variable
 export EDITOR=vim
 
-# Use sccache for build artifacts
+# use sccache for build artifacts
 export RUSTC_WRAPPER=/usr/bin/sccache
 
-# Additional function
-man() {
+# nnn bookmark list
+export NNN_BMS='c:~/.config;d:~/Downloads/;a:/home/sabit/Remote/Android/storage/emulated/0;r:/home/sabit/Remote'
+
+# nnn plugin configuration
+export NNN_PLUG='a:autojump;b:bookmarks'
+
+# configure wordchars to exclude some non-alphanumeric as word
+WORDCHARS='.-_'
+
+# ===============================================================
+# zsh function definition                                       =
+# ===============================================================
+
+# setting manpages syntax coloring
+function man() {
     LESS_TERMCAP_md=$'\e[01;31m' \
     LESS_TERMCAP_me=$'\e[0m' \
     LESS_TERMCAP_se=$'\e[0m' \
@@ -128,69 +163,26 @@ man() {
     command man "$@"
 }
 
-_systemctl_unit_state() {
+# unknown(?)
+function _systemctl_unit_state() {
   typeset -gA _sys_unit_state
-  _sys_unit_state=( $(__systemctl list-unit-files "$PREFIX*" | awk '{print $1, $2}') ) }
+  _sys_unit_state=( $(__systemctl list-unit-files "$PREFIX*" | awk '{print $1, $2}') )
+}
 
-proxyon() {
+# set http proxy
+function proxyon() {
     export HTTP_PROXY='127.0.0.1:8080'
     export HTTPS_PROXY='127.0.0.1:8080'
 }
 
-proxyoff() {
+# unset http proxy
+function proxyoff() {
     unset HTTP_PROXY
     unset HTTPS_PROXY
 }
 
-# zoxide init shell
-eval "$(zoxide init zsh)"
-
-# execute navi as Ctrl-G from shell
-# source <(echo "$(navi widget zsh)")
-
-_call_navi() {
-  local selected
-  if [ -n "$LBUFFER" ]; then
-    if selected="$(printf "%s" "$(navi --print --fzf-overrides '--no-select-1' --query "${LBUFFER}" </dev/tty)")"; then
-      LBUFFER="$selected"
-    fi
-  else
-    if selected="$(printf "%s" "$(navi --print </dev/tty)")"; then
-      LBUFFER="$selected"
-    fi
-  fi
-  zle redisplay
-}
-
-zle -N _call_navi
-
-bindkey '^g' _call_navi
-
-##### end of navi config #####
-
-# tab multiplexer configuration: https://github.com/austinjones/tab-rs/
-# source /home/sabit/.tab/completion/zsh-history.zsh
-# end tab configuration
-
-# tab-rs key binding
-alacritty_instance=$(pgrep alacritty | wc -l)
-bindkey -s '^[1' "^Qtab $alacritty_instance/1^J"
-bindkey -s '^[2' "^Qtab $alacritty_instance/2^J"
-bindkey -s '^[3' "^Qtab $alacritty_instance/3^J"
-bindkey -s '^[4' "^Qtab $alacritty_instance/4^J"
-bindkey -s '^[5' "^Qtab $alacritty_instance/5^J"
-bindkey -s '^[6' "^Qtab $alacritty_instance/6^J"
-bindkey -s '^[7' "^Qtab $alacritty_instance/7^J"
-bindkey -s '^[8' "^Qtab $alacritty_instance/8^J"
-bindkey -s '^[9' "^Qtab $alacritty_instance/9^J"
-bindkey -s '^[0' "^Qtab $alacritty_instance/0^J"
-
-# nnn bookmark list
-export NNN_BMS='c:~/.config;d:~/Downloads/;a:/home/sabit/Remote/Android/storage/emulated/0;r:/home/sabit/Remote'
-
 # nnn quitcd function
-n ()
-{
+function n () {
     # Block nesting of nnn in subshells
     if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
         echo "nnn is already running"
@@ -217,13 +209,7 @@ n ()
     fi
 }
 
-# nnn plugin configuration
-export NNN_PLUG='a:autojump;b:bookmarks'
-
-# Configure wordchars to exclude some non-alphanumeric as word
-WORDCHARS='.-_'
-
-# Youtube Search and Player with mpv
+# youtube Search and Player with mpv
 function yta() {
     # echo ytdl://ytsearch"$1":"${*:2}"
     mpv --ytdl-format=bestaudio ytdl://ytsearch"$1":"${*:2}"
