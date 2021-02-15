@@ -1,3 +1,7 @@
+" =======================================================
+" vim setup and initialization                          =
+" =======================================================
+
 " load defaults.vim configuration
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
@@ -19,6 +23,7 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 " vim-plug init
 call plug#begin('~/.vim/plugged')
 
+" vim-plug package list
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'easymotion/vim-easymotion'
 Plug 'frazrepo/vim-rainbow'
@@ -48,15 +53,61 @@ Plug 'wellle/targets.vim'
 " initialize plugin system
 call plug#end()
 
+" =======================================================
+" vim set commands                                      =
+" =======================================================
+
 " fix lightline not showing
 set laststatus=2
+
+" disable timeout and enable ttimeout
+set notimeout
+set ttimeout
+
+" disable mouse
+set mouse=
+
+" set lazyredraw
+set lazyredraw
+
+" change tab to space
+set expandtab
+
+" enable relative number and number
+set relativenumber
+set number
+
+" disable showmode (mode specified by lightline)
+set noshowmode
+
+" always show tabline
+set showtabline=2
+
+" adding '**' to path for fuzzy find
+set path+=**
+
+" set hidden buffer
+set hidden
+
+" search to be case insensitive
+set ignorecase
+set smartcase
+
+" enable incremental search
+set incsearch
+
+" =======================================================
+" vim key mapping                                       =
+" =======================================================
 
 " map <Leader> to <Space>
 nnoremap <Space> <NOP>
 let mapleader = "\<Space>"
 
-" vim user keybinding
+" nerdtree toggle
 map <C-k> :NERDTreeToggle<CR>
+
+" tab key mapping
 nmap <Leader>1 mb<Plug>lightline#bufferline#go(1)'bzz
 nmap <Leader>2 mb<Plug>lightline#bufferline#go(2)'bzz
 nmap <Leader>3 mb<Plug>lightline#bufferline#go(3)'bzz
@@ -67,6 +118,8 @@ nmap <Leader>7 mb<Plug>lightline#bufferline#go(7)'bzz
 nmap <Leader>8 mb<Plug>lightline#bufferline#go(8)'bzz
 nmap <Leader>9 mb<Plug>lightline#bufferline#go(9)'bzz
 nmap <Leader>0 mb<Plug>lightline#bufferline#go(10)'bzz
+
+" create and load sessions
 nnoremap <Leader>S1 :tabdo NERDTreeClose<CR>:mksession! ~/.vimsession/vimsession-1<CR>
 nnoremap <Leader>S2 :tabdo NERDTreeClose<CR>:mksession! ~/.vimsession/vimsession-2<CR>
 nnoremap <Leader>S3 :tabdo NERDTreeClose<CR>:mksession! ~/.vimsession/vimsession-3<CR>
@@ -87,62 +140,95 @@ nnoremap <Leader>s7 :source ~/.vimsession/vimsession-7<CR>
 nnoremap <Leader>s8 :source ~/.vimsession/vimsession-8<CR>
 nnoremap <Leader>s9 :source ~/.vimsession/vimsession-9<CR>
 nnoremap <Leader>s0 :source ~/.vimsession/vimsession-10<CR>
+
+" raw paste key mapping
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+" vim quit-to-normal-mode mapping
 nnoremap <Esc>l <Esc>
 inoremap <Esc>l <Esc>
-inoremap jj <Esc>
 vnoremap <Esc>l <Esc>
+inoremap jj <Esc>
+
+" change pwd to opened file's location
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" delete to hidden buffer
 nnoremap <Leader>d "_
 vnoremap <Leader>d "_
+
 " search selected text
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
 " start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
+
 " start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
 " capital y to behave like capital d or c
 nnoremap Y y$
+
 " copy until EOL to system clipboard
 nmap zY zy$
 nnoremap <Leader>w :call ToggleWrapMode()<CR>
+
 " coc scroll float
 nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1, 1) : "\<C-f>"
 nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0, 1) : "\<C-b>"
 inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1, 1)\<cr>" : "\<Right>"
 inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0, 1)\<cr>" : "\<Left>"
+
 " fzf binding
 nnoremap <C-p> :FZF<CR>
-
-" disable timeout and enable ttimeout
-set notimeout
-set ttimeout
 
 " auto pairs plugin config
 nnoremap <expr> <Plug>AutoPairsFastWrapPlug ':call AutoPairsFastWrap()<CR>'
 nmap <silent> <Leader>e <Plug>AutoPairsFastWrapPlug
 silent! call repeat#set("\<Plug>AutoPairsFastWrapPlug", v:count)
 
-" vim custom command
+" =======================================================
+" vim custom command                                    =
+" =======================================================
+
 " closing buffer cleanly
 command -nargs=? -bang BW :silent! argd % | bw<bang><args>
 
-" disable mouse
-set mouse=
-
-" set lazyredraw
-set lazyredraw
-
-" change tab to space
-set expandtab
-
-" enable relative number and number
-set relativenumber
-set number
+" =======================================================
+" vim set variable                                      =
+" =======================================================
 
 " set paste mode every pasting in insert mode
 let &t_SI .= "\<Esc>[?2004h"
 let &t_EI .= "\<Esc>[?2004l"
+
+" set wrapMode init mode
+let s:wrapMode=0
+
+" lightline buffer tab configuration
+let g:lightline = {
+  \ 'tabline': {
+  \     'left': [ [ 'buffers' ] ],
+  \     'right': [ [ '' ] ]
+  \ },
+  \ 'component_expand': {
+  \     'buffers': 'lightline#bufferline#buffers'
+  \ },
+  \ 'component_type': {
+  \     'buffers': 'tabsel'
+  \ }
+\ }
+let g:lightline#bufferline#show_number  = 2
+let g:lightline#bufferline#filename_modifier = ':t'
+let g:lightline#bufferline#unnamed      = '[No Name]'
+
+" table-mode corner set
+let g:table_mode_corner_corner ='+'
+let g:table_mode_header_fillchar ='-'
+
+" =======================================================
+" vim function definition                               =
+" =======================================================
 
 " raw paste function
 function! XTermPasteBegin()
@@ -150,8 +236,6 @@ function! XTermPasteBegin()
     set paste
     return ""
 endfunction
-
-let s:wrapMode=0
 
 " toggle wrap mode on/off
 function! ToggleWrapMode()
@@ -198,52 +282,20 @@ function! WrapModeOff()
     return ""
 endfunction
 
-" disable showmode (mode specified by lightline)
-set noshowmode
-
-" always show tabline
-set showtabline=2
-
-" lightline buffer tab configuration
-let g:lightline = {
-  \ 'tabline': {
-  \     'left': [ [ 'buffers' ] ],
-  \     'right': [ [ '' ] ]
-  \ },
-  \ 'component_expand': {
-  \     'buffers': 'lightline#bufferline#buffers'
-  \ },
-  \ 'component_type': {
-  \     'buffers': 'tabsel'
-  \ }
-\ }
-let g:lightline#bufferline#show_number  = 2
-let g:lightline#bufferline#filename_modifier = ':t'
-let g:lightline#bufferline#unnamed      = '[No Name]'
+" =======================================================
+" vim set variable                                      =
+" =======================================================
 
 " lightline-buffer update modified indicator
 autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
-" adding '**' to path for fuzzy find
-set path+=**
-
-" set hidden buffer
-set hidden
-
-" search to be case insensitive
-set ignorecase
-set smartcase
-
-" enable incremental search
-set incsearch
-
-" set black menu with white text
-hi Pmenu ctermbg=black ctermfg=white
-
-" table-mode corner set
-let g:table_mode_corner_corner ='+'
-let g:table_mode_header_fillchar ='-'
-
 " tab setting on each file
 autocmd FileType c,cpp,java,markdown,rust,text,vim,zsh setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType bash,css,html,javascript,sh,typescript setlocal ts=2 sts=2 sw=2 expandtab
+
+" =======================================================
+" vim miscellaneous                                     =
+" =======================================================
+
+" set black menu with white text
+hi Pmenu ctermbg=black ctermfg=white
