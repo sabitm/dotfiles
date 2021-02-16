@@ -1,0 +1,17 @@
+set surround
+set commentary
+set exchange
+set textobj-entire
+
+set relativenumber
+set ignorecase
+set smartcase
+set incsearch
+
+let mapleader = " "
+set easymotion
+
+inoremap <A-l> <Esc>
+inoremap jj <Esc>
+vnoremap <A-l> <Esc>
+nnoremap <A-l> <Esc>

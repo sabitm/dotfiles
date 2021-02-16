@@ -1,0 +1,11 @@
+[Unit]
+Description=Battery notification
+After=multi-user.target powertop.service tlp.service startup.service
+Before=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/home/sabit/Downloads/script/batt-notif
+
+[Install]
+WantedBy=multi-user.target
