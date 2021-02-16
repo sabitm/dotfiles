@@ -291,7 +291,7 @@ autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " tab setting on each file
 autocmd FileType c,cpp,java,markdown,rust,text,vim,zsh setlocal ts=4 sts=4 sw=4 expandtab
-autocmd FileType bash,css,html,javascript,sh,typescript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType bash,css,html,javascript,sh,toml,typescript setlocal ts=2 sts=2 sw=2 expandtab
 
 " =======================================================
 " vim miscellaneous                                     =
