@@ -6,6 +6,9 @@ gpg --export --armor --output <public_key_out> <user-id>
 # Export private key
 gpg --export-secret-keys --armor --output <privkey_asc_out> <user-id>
 
+# Import exported private key
+gpg --import <privkey_asc>
+
 # Encrypt file to recipient using asymmetric key
 gpg --recipient <user-id> --encrypt <file>
 
@@ -28,4 +31,5 @@ $ file: find -maxdepth 1 -type f
 $ folder: find -maxdepth 1 -type d
 $ encrypted_file: find -maxdepth 1 -type f
 $ encrypted_folder: find -maxdepth 1 -type f
+$ privkey_asc: find -maxdepth 1 -type f
 $ user-id: gpg --list-keys | grep uid | cut -d'<' -f2 | sed 's/>//'
