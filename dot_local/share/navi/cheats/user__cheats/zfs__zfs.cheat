@@ -1,0 +1,12 @@
+% ZFS command cheat list
+
+# import pools by numeric id with mountpoint
+sudo zpool import <num_id> -R <root_mount> <pool> -N
+
+# import pools by disk id with mountpoint
+sudo zpool import -d <disk_id> -R <root_mount> <pool> -N
+
+$ disk_id: ls /dev/disk/by-id/*
+$ num_id: sudo zpool import | rg id: | sd '^.*: ' ''
+$ root_mount: echo -e "/mnt\n"
+$ pool: sudo zpool import | rg pool: | sd '^.*: ' ''

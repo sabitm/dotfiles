@@ -1,0 +1,10 @@
+% Docker cheat lists
+
+# Run docker with interactive tty
+sudo docker run -it --rm <docker_image> bash
+
+# Run docker with mount bind and interactive tty
+sudo docker run -it -v <mount_src>:<mount_dest> --rm <docker_image> bash
+
+$ docker_image: sudo docker image ls | tail -n +2 | cut -d' ' -f1
+$ mount_src: find $PWD -maxdepth 1 -type d ! -path $PWD

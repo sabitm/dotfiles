@@ -1,0 +1,19 @@
+% File transfer cheat list
+
+# open sftp to android server
+sftp -P 8022 $(ip r | head -n 1 | cut -d' ' -f3)
+
+# mount cloud storage using rclone
+rclone mount <remote> /home/sabit/Remote/Cloud
+
+# mount cloud using rclone with vfs cache flags
+rclone mount --vfs-cache-mode writes <remote> /home/sabit/Remote/Cloud
+
+# copy files to cloud using rclone
+rclone copy --progress <file> <remote>
+
+# mount samba shared from windows
+sudo mount -t cifs //192.168.122.24/Users/Administrator/Downloads/Shared ~/Samba -o username=user,password=pass,workgroup=work,iocharset=utf8,uid=sabit,gid=sabit
+
+$ file: ls
+$ remote: rclone listremotes

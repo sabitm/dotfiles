@@ -1,0 +1,12 @@
+% Archiver cheat list
+
+# all cheat
+echo all
+
+# creating an archive with sparse efficiency
+tar -cSvzf <out_name>.tar.gz <input>
+
+# echo hello
+echo hello
+
+$ input: ls

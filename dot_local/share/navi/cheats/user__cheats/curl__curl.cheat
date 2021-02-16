@@ -1,0 +1,4 @@
+% Additional curl
+
+# Find public IP using external API
+curl 'https://api.ipify.org'; echo

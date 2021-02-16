@@ -1,0 +1,106 @@
+% Miscellaneous cheat list
+
+# Change wallpaper using gsettings
+gsettings set org.gnome.desktop.background picture-uri 'file:///<path_to_image>'
+
+# Execute scrcpy
+scrcpy --shortcut-mod=lctrl -b500K -m600
+
+# Find fastest mirror in Hong Kong
+reflector --country Hong\ Kong --sort rate
+
+# Set Internal Field Separator to split on newline (Don't forget to unset afterwards)
+IFS=$'\n'
+
+# Check program memory usage using ps
+tput rmam; ps aux | tail -n +2 | rg -e "<program>" | tr -s ' ' | cut -d' ' -f4,6,11-99 | sd '0.0 0.*\n' '' | head -n -1 | sort -n -k 1,1 -k 2,2; tput smam
+
+# Connect adb through wireless using TCP/IP
+adb connect $(ip r | head -n 1 | cut -d' ' -f3):41414
+
+# Boot systemd-nspawn container
+sudo systemd-nspawn -b -D <container_dir>
+
+# Use X11 on systemd-nspawn container
+touch /tmp/container_xauth; XAUTH=/tmp/container_xauth; xauth nextract - "$DISPLAY" | sed -e 's/^..../ffff/' | xauth -f "$XAUTH" nmerge -; sudo systemd-nspawn -D <container_dir> --bind=/tmp/.X11-unix --bind="$XAUTH" -E DISPLAY="$DISPLAY" -E XAUTHORITY="$XAUTH"
+
+# Connect to android using ssh
+ssh -p 8022 sabit@$(ip r | head -n 1 | cut -d' ' -f3)
+
+# Connect to raspberry pi 4 using ssh
+ssh pi@192.168.43.169
+
+# Mount android device storage using adbfs
+adbfs /home/sabit/Remote/Android
+
+# Convert document to another type using pandoc
+pandoc -o "<source_file>".<target_file_type> -t <target_file_type> "<source_file>"
+
+# Convert document to docx using pandoc
+pandoc -o "<source_file>".docx -t docx --reference-doc "<reference_doc>" "<source_file>"
+
+# Makepkg build with skip integration option
+makepkg -s --skipinteg
+
+# Blur an image with imagemagick's convert
+convert <image> -blur 0x128 <output_name>
+
+# Extract images from video
+ffmpeg -ss <mm>:<ss> -i <source_video> -r <frame_rate> -f image2 img%3d.jpeg
+
+# Extrack single frame from video at specified time
+ffmpeg -ss <mm>:<ss> -i <source_video> -frames 1 -f image2 img%3d.jpeg
+
+# Fire simple python http server
+python3 -m http.server
+
+# JavaScript formatter using js-beautify
+js-beautify <source_file>
+
+# Convert video to gif using ffmpeg
+ffmpeg -i <source_video> -r <frame_rate> -vf "scale=<scale>:-1,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -ss <start_time> -to <finish_time> <output_name>.gif
+
+# Updating aur .SRCINFO
+makepkg --printsrcinfo > .SRCINFO
+
+# Split pdf at each num page
+qpdf --split-pages=<num> <input_pdf> out_%d.pdf
+
+# Extract pdf at specified page
+qpdf --empty --pages "<input_pdf>" <page> -- <output_name>.pdf
+
+# List zip contents
+unzip -l <zipfile>
+
+# Start ftp server (root: /srv/ftp)
+sudo systemctl start vsftpd.service
+
+# Play shuffled music with mpv
+IFS=$'\n'; for i in $(ls | shuf); do mpv "$i"; done
+
+# Create bash script with template
+echo '#!/bin/bash' > <script_name>; cat << eof >> <script_name>
+set -euo pipefail
+shopt -s inherit_errexit
+eof
+
+# Convert PDF to PNG image using poppler's pdftoppm
+pdftoppm <input_pdf> <outputname> -png -f <page> -singlefile
+
+# Convert image to pdf with page size
+convert <image> -background white -density 72 -page a4 <output_name>.pdf
+
+# Merge pdf to single file
+pdfunite <input_pdf> <output>.pdf
+
+$ image: ls
+$ path_to_image: ls $PWD/*
+$ container_dir: find ~/Container -maxdepth 1 -not -path '*/\.*' ! -path ~/Container
+$ source_file: ls
+$ reference_doc: ls
+$ source_video: ls
+$ start_time: echo -e "00:00:00\n"
+$ finish_time: echo -e "00:00:01\n"
+$ scale: echo -e "360\n"
+$ input_pdf: ls *.pdf
+$ zipfile: ls
