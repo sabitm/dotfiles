@@ -214,3 +214,7 @@ function yta() {
     # echo ytdl://ytsearch"$1":"${*:2}"
     mpv --ytdl-format=bestaudio ytdl://ytsearch"$1":"${*:2}"
 }
+
+if [[ $TERM == "alacritty" && -z $TMUX ]]; then
+    exec tmux
+fi
