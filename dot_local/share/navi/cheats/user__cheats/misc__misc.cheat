@@ -43,7 +43,7 @@ pandoc -o "<source_file>".docx -t docx --reference-doc "<reference_doc>" "<sourc
 makepkg -s --skipinteg
 
 # Blur an image with imagemagick's convert
-convert <image> -blur 0x128 <output_name>
+convert <image> -blur 0x64 <output_name>
 
 # Extract images from video
 ffmpeg -ss <mm>:<ss> -i <source_video> -r <frame_rate> -f image2 img%3d.jpeg
