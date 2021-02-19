@@ -24,7 +24,7 @@ gpgtar -c --s2k-cipher-algo AES256 --s2k-digest-algo SHA512 --s2k-count 65536 --
 # Encrypt directory to recipient using asymmetric key
 gpgtar --recipient <user-id> --encrypt --output <folder>.gpg <folder>
 
-# Decrypt file using asymmetric or symmetric key
+# Decrypt directory using asymmetric or symmetric key
 gpgtar --decrypt <encrypted_folder>
 
 $ file: find -maxdepth 1 -type f
