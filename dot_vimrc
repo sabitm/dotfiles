@@ -49,6 +49,7 @@ Plug 'tpope/vim-surround'
 Plug 'udalov/kotlin-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'wellle/targets.vim'
+Plug 'vimwiki/vimwiki'
 
 " initialize plugin system
 call plug#end()
@@ -299,3 +300,9 @@ autocmd FileType bash,css,html,javascript,sh,toml,typescript setlocal ts=2 sts=2
 
 " set black menu with white text
 hi Pmenu ctermbg=black ctermfg=white
+
+" activate filetype plugin
+filetype plugin on
+
+" activate syntax
+syntax on
