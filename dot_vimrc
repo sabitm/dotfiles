@@ -189,6 +189,9 @@ nnoremap <expr> <Plug>AutoPairsFastWrapPlug ':call AutoPairsFastWrap()<CR>'
 nmap <silent> <Leader>e <Plug>AutoPairsFastWrapPlug
 silent! call repeat#set("\<Plug>AutoPairsFastWrapPlug", v:count)
 
+" vimwiki convert all wikis to html
+nnoremap <Leader>wha :VimwikiAll2HTML!<CR>
+
 " =======================================================
 " vim custom command                                    =
 " =======================================================
