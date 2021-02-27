@@ -146,10 +146,11 @@ nnoremap <Leader>s0 :source ~/.vimsession/vimsession-10<CR>
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " vim quit-to-normal-mode mapping
-nnoremap <Esc>l <Esc>
-inoremap <Esc>l <Esc>
-vnoremap <Esc>l <Esc>
-inoremap jj <Esc>
+" STATUS: using interception-tools caps2esc instead
+" nnoremap <Esc>l <Esc>
+" inoremap <Esc>l <Esc>
+" vnoremap <Esc>l <Esc>
+" inoremap jj <Esc>
 
 " change pwd to opened file's location
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
