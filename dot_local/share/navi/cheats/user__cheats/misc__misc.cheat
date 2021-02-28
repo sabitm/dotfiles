@@ -93,6 +93,9 @@ convert <image> -background white -density 72 -page a4 <output_name>.pdf
 # Merge pdf to single file
 pdfunite <input_pdf> <output>.pdf
 
+# Remove broken symlinks in current directory
+find . -xtype l -delete
+
 $ image: ls
 $ path_to_image: ls $PWD/*
 $ container_dir: find ~/Container -maxdepth 1 -not -path '*/\.*' ! -path ~/Container
