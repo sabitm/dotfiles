@@ -81,8 +81,8 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # fzf zsh completion
 source /usr/share/fzf/completion.zsh
 
-# mcfly zsh bindings
-source /usr/share/doc/mcfly/mcfly.zsh
+# fzf zsh keybindings
+source /usr/share/fzf/key-bindings.zsh
 
 # execute navi as Ctrl-G from shell
 source <(navi widget zsh)
