@@ -142,7 +142,7 @@ export EDITOR=vim
 export RUSTC_WRAPPER=/usr/bin/sccache
 
 # nnn bookmark list
-export NNN_BMS='c:~/.config;d:~/Downloads/;a:/home/sabit/Remote/Android/storage/emulated/0;r:/home/sabit/Remote'
+export NNN_BMS='c:~/.config;d:~/Downloads/;a:/home/sabit/Remote/Android/storage/emulated/0;r:/home/sabit/Remote;u:/run/media/sabit'
 
 # nnn plugin configuration
 export NNN_PLUG='a:autojump;b:bookmarks'
