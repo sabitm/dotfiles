@@ -96,6 +96,9 @@ pdfunite <input_pdf> <output>.pdf
 # Remove broken symlinks in current directory
 find . -xtype l -delete
 
+# Extract a package using bsdtar
+mkdir <target_dir>; bsdtar -xf <source_file> -C <target_dir>
+
 $ image: ls
 $ path_to_image: ls $PWD/*
 $ container_dir: find ~/Container -maxdepth 1 -not -path '*/\.*' ! -path ~/Container
