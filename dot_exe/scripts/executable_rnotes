@@ -1,0 +1,21 @@
+#!/bin/bash
+
+RDIR="$HOME/Notebooks"
+
+isMounted=$(grep markor < /proc/mounts | wc -l)
+if [[ $isMounted -eq 0 ]]; then
+  echo Mounting...
+  rclone mount --rc --vfs-cache-mode writes dbox:DropsyncFiles/markor "$RDIR" 2> /dev/null &
+else
+  echo Refreshing...
+  rclone rc vfs/refresh --fast-list recursive=true > /dev/null
+fi
+
+isMounted=$(grep markor < /proc/mounts | wc -l)
+while [[ $isMounted -eq 0 ]]; do
+  sleep 0.5s
+  isMounted=$(grep markor < /proc/mounts | wc -l)
+done
+
+cd "$RDIR"
+vim --cmd "let g:vimwiki_list = [{'path': '~/Notebooks/kbase/', 'path_html': '~/Notebooks/kbase/htmlout/'}]" .

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+
+{ pidof Xorg || pidof Xwayland; } > /dev/null \
+  || { echo "Xorg/Xwayland server not running!"; exit 1; }
+
+read -r stts < /sys/class/power_supply/BAT0/status
+read -r cpy < /sys/class/power_supply/BAT0/capacity
+
+if [[ $stts = "Discharging" ]]; then
+  if [[ $cpy -lt 15 ]]; then
+    systemctl suspend
+  elif [[ $cpy -lt 22 ]]; then
+    notify-send "Battery $cpy% Remaining" \
+      'Plug in the charger' \
+      --icon="$DIR"/misc/icon/low_battery.png
+  fi
+else
+  if [[ $cpy -gt 79 ]]; then
+    notify-send "Battery $cpy% Charged" \
+      'Unplug the charger' \
+      --icon="$DIR"/misc/icon/full_battery.png
+  fi
+fi

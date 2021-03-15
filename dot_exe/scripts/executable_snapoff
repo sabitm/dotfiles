@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo zfs destroy zroot/ROOT/default@snap
+sleep 0.5
+sudo zfs destroy zroot/data/log@snap
+sleep 0.5
+sudo zfs destroy zboot/BOOT/default@snap

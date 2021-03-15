@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $# -gt 1 && $1 = '-c' ]]; then
+  sort='pcpu'
+  query="$2"
+elif [[ $1 = '-c' ]]; then
+  sort='pcpu'
+else
+  sort='pmem'
+  query="$1"
+fi
+
+tput rmam
+ps axo pid,pcpu,pmem,rss,cmd --sort="$sort" | rg """$query"
+tput smam

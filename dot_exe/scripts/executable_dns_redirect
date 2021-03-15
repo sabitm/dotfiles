@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sudo iptables -t nat -A OUTPUT -p udp --dport 53 -j DNAT --to 127.0.0.1:53
+sudo iptables -t nat -A OUTPUT -p tcp --dport 53 -j DNAT --to 127.0.0.1:53
+
+cloudflared proxy-dns
+
+sudo iptables -t nat -D OUTPUT 1
+sudo iptables -t nat -D OUTPUT 1

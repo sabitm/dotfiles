@@ -1,0 +1,11 @@
+#!/bin/bash
+
+while read -r usb_port; do
+  read -r product < /sys/bus/usb/devices/"$usb_port"/product
+  echo "Disabling USB Autosuspend on $product"
+  echo 'on' > /sys/bus/usb/devices/"$usb_port"/power/control
+done < <(dmesg | grep -i \
+    -e 'product: om' \
+    -e 'product.*mouse' \
+    -e 'product.*keyboard' \
+  | sed -e 's/.*usb //' -e 's/:.*//')

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+n () {
+  if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]
+  then
+    echo "nnn is already running"
+    return
+  fi
+  NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+  nnn -dco "$@"
+  if [ -f "$NNN_TMPFILE" ]
+  then
+    . "$NNN_TMPFILE"
+    rm -f "$NNN_TMPFILE" > /dev/null
+  fi
+}
+
+RDIR="$HOME/Remote/Cloud"
+
+isMounted=$(grep -i 'remote/cloud' < /proc/mounts | wc -l)
+if [[ $isMounted -eq 1 ]]; then
+  echo "Error: $RDIR already used for mounting" >&2
+  exit 1
+fi
+
+echo Mounting...
+remote=$(rclone listremotes | fzf)
+rclone mount --vfs-cache-mode writes "$remote" "$RDIR" 2> /dev/null &
+
+isMounted=$(grep -i 'remote/cloud' < /proc/mounts | wc -l)
+while [[ $isMounted -eq 0 ]]; do
+  sleep 0.5s
+  isMounted=$(grep -i 'remote/cloud' < /proc/mounts | wc -l)
+done
+
+n "$RDIR"
+umount "$RDIR"

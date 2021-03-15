@@ -1,0 +1,44 @@
+#!/bin/bash
+
+usage() {
+  cat <<EOF
+Usage: $(basename "${BASH_SOURCE[0]}") <interface_name>
+
+Find specific IP from VPN connection
+
+Argument:
+
+interface_name      VPN interface name (nmcli c)
+EOF
+  exit
+}
+
+ubup() {
+  nmcli c up "$@"
+}
+ubdown() {
+  nmcli c down "$@"
+}
+
+# ============================== #
+
+[[ $# -eq 0 ]] && usage
+
+while true; do
+  while true; do
+    ubdown "$@"
+    sleep 0.1s
+    ubup "$@"
+
+    ip=$(ip a | rg ppp0 | tail -n 1 | cut -d' ' -f6)
+    third=$(echo $ip | cut -d'.' -f3)
+    echo $third
+
+    [[ "$third" != "" ]] && break
+  done
+
+  if [[ $third -lt 12 || ($third -gt 19 && $third -lt 24) ]]
+  then
+    break
+  fi
+done

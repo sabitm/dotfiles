@@ -1,0 +1,52 @@
+#!/bin/bash
+
+USAGE() {
+  echo 'USAGE: find_similar <url> [OPTIONS]'
+  echo
+  echo 'OPTIONS:'
+  echo -e '\t-e,  extended search'
+  exit 1
+}
+
+if [[ "$1" = "" ]]; then
+  USAGE
+elif [[ "$2" != "" ]] && [[ "$2" != -+(e) ]]; then
+  USAGE
+fi
+
+find_similar() {
+  curl -s "https://www.alexa.com/find-similar-sites/data?site=$1" \
+    | jq -r '.results[0:6] | .[] | "\(.site2) \(.alexa_rank)"'
+}
+export -f find_similar
+
+concat_out() {
+  state='first'
+  sites=()
+  queried=()
+
+  url="$1"
+
+  while IFS=' ' read -r site rank; do
+    echo "$rank $site"
+    sites+=("$site")
+  done < <(find_similar "$url" | sort)
+
+  queried+=("$url")
+
+  for (( i = 1; i < ${#2}; i++ )); do
+    subtracted=($(comm --nocheck-order -3 \
+      <(printf "%s\n" "${sites[@]}") \
+      <(printf "%s\n" "${queried[@]}")))
+
+    queried="${sites[@]}"
+    sites=()
+    while IFS=' ' read -r site rank; do
+      echo "$rank $site"
+      sites+=("$site")
+    done < <(printf "%s\n" "${subtracted[@]}" \
+      | parallel -j0 'find_similar {}' | sort -u)
+  done
+}
+
+concat_out $1 $2 | sort -u -n | sed 's/ / https:\/\//'
