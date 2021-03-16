@@ -130,7 +130,7 @@ PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f %# '
 export XDG_CONFIG_HOME="$HOME/.config/"
 
 # export additional path
-export PATH=$PATH:/home/sabit/go/bin:~/.local/bin:~/.gem/ruby/2.7.0/bin
+export PATH=$PATH:~/.exe/scripts
 
 # unset fzf completion trigger
 export FZF_COMPLETION_TRIGGER=''
