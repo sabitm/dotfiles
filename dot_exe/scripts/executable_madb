@@ -1,0 +1,48 @@
+#!/bin/bash
+
+n () {
+  if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]
+  then
+    echo "nnn is already running"
+    return
+  fi
+  NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+  nnn -dco "$@"
+  if [ -f "$NNN_TMPFILE" ]
+  then
+    . "$NNN_TMPFILE"
+    rm -f "$NNN_TMPFILE" > /dev/null
+  fi
+}
+
+RDIR="$HOME/Remote/Android"
+
+isMounted=$(grep -i 'fuse.adbfs' < /proc/mounts | wc -l)
+if [[ $isMounted -eq 1 ]]; then
+  echo "Error: $RDIR already used for mounting" >&2
+  exit 1
+fi
+
+echo "Checking adb connection..."
+conn=$(adb devices 2> /dev/null | wc -l)
+[[ $conn -lt 3 ]] \
+  && adb connect $(ip r | head -n 1 | cut -d' ' -f3):41414
+echo "Ok"
+
+echo Mounting...
+adbfs "$RDIR" 2>&1 > /dev/null
+
+isMounted=$(grep -i 'fuse.adbfs' < /proc/mounts | wc -l)
+while [[ $isMounted -eq 0 ]]; do
+  sleep 0.5s
+  isMounted=$(grep -i 'fuse.adbfs' < /proc/mounts | wc -l)
+done
+
+n "$RDIR/storage/emulated/0"
+echo "Done"
+
+echo "Unmounting..."
+while ! fusermount -u "$RDIR" 2> /dev/null; do
+  sleep 1
+done
+echo "Done"
