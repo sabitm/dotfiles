@@ -38,7 +38,7 @@ while [[ $isMounted -eq 0 ]]; do
   isMounted=$(grep -i 'fuse.adbfs' < /proc/mounts | wc -l)
 done
 
-n "$RDIR/storage/emulated/0"
+n
 echo "Done"
 
 echo "Unmounting..."
