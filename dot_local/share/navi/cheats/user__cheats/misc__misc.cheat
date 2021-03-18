@@ -45,11 +45,11 @@ makepkg -s --skipinteg
 # Blur an image with imagemagick's convert
 convert <image> -blur 0x64 <output_name>
 
-# Extract images from video
-ffmpeg -ss <mm>:<ss> -i <source_video> -r <frame_rate> -f image2 img%3d.jpeg
+# Extract multiple images from video
+ffmpeg -ss <mm>:<ss> -i <source_video> -vf fps=<frame_rate> -q:v 0 img%3d.jpg
 
 # Extrack single frame from video at specified time
-ffmpeg -ss <mm>:<ss> -i <source_video> -frames 1 -f image2 img%3d.jpeg
+ffmpeg -ss <mm>:<ss> -i <source_video> -vframes 1 -q:v 0 img%3d.jpg
 
 # Fire simple python http server
 python3 -m http.server
