@@ -135,7 +135,7 @@ PROMPT='%F{green}%B%n%b%f:%F{blue}%B%1~%b%f %# '
 export XDG_CONFIG_HOME="$HOME/.config/"
 
 # export additional path
-export PATH=$PATH:~/.exe/scripts
+export PATH=$PATH:~/.exe/scripts:~/.exe/bin
 
 # unset fzf completion trigger
 export FZF_COMPLETION_TRIGGER=''
