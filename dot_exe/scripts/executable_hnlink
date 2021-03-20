@@ -41,6 +41,9 @@ query "${*}" \
       -e 's/.*<td class="title"><a href="/--0O /' \
       -e 's/" class="storylink">/ O0-- /' \
       -e 's/<\/a><span class="sitebit.*//' \
+      -e 's/<a href="/\n<a href="/g' \
+  | rg -i -e '<a href=' -e '--0O' \
+  | sed \
       -e 's/.*<a href="//' \
       -e 's/".*//' \
   | recode html..ascii \
