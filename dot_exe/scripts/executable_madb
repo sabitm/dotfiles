@@ -37,9 +37,9 @@ while [[ $isMounted -eq 0 ]]; do
   sleep 0.5s
   isMounted=$(grep -i 'fuse.adbfs' < /proc/mounts | wc -l)
 done
+echo "Done"
 
 n
-echo "Done"
 
 echo "Unmounting..."
 while ! fusermount -u "$RDIR" 2> /dev/null; do
