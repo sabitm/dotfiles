@@ -11,5 +11,5 @@ else
 fi
 
 tput rmam
-ps axo pid,pcpu,pmem,rss,cmd --sort="$sort" | rg """$query"
+ps axo pid,pcpu,pmem,rss,cmd --sort="$sort" | rg -i """$query"
 tput smam
