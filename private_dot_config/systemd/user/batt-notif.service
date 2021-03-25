@@ -5,7 +5,7 @@ Before=shutdown.target
 
 [Service]
 Type=simple
-ExecStart=/home/sabit/Downloads/script/batt-notif
+ExecStart=/home/sabit/.exe/scripts/batt-notif
 
 [Install]
 WantedBy=multi-user.target
