@@ -99,6 +99,9 @@ find . -xtype l -delete
 # Extract a package using bsdtar
 mkdir <target_dir>; bsdtar -xf <source_file> -C <target_dir>
 
+# Burn ISO to usb drive using dd
+sudo dd bs=4M if="<input_iso>" of=<out_dev_disk> conv=fdatasync status=progress
+
 $ image: ls
 $ path_to_image: ls $PWD/*
 $ container_dir: find ~/Container -maxdepth 1 -not -path '*/\.*' ! -path ~/Container
@@ -110,3 +113,5 @@ $ finish_time: echo -e "00:00:01\n"
 $ scale: echo -e "360\n"
 $ input_pdf: ls *.pdf
 $ zipfile: ls
+$ input_iso: ls *.iso
+$ out_dev_disk: ls /dev/sd*
