@@ -31,7 +31,7 @@ ssh -p 8022 sabit@$(ip r | head -n 1 | cut -d' ' -f3)
 ssh pi@192.168.43.169
 
 # Mount android device storage using adbfs
-adbfs /home/sabit/Remote/Android
+adbfs ~/Remote/Android
 
 # Convert document to another type using pandoc
 pandoc -o "<source_file>".<target_file_type> -t <target_file_type> "<source_file>"

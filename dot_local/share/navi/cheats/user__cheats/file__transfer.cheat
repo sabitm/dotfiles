@@ -4,10 +4,10 @@
 sftp -P 8022 $(ip r | head -n 1 | cut -d' ' -f3)
 
 # mount cloud storage using rclone
-rclone mount <remote> /home/sabit/Remote/Cloud
+rclone mount <remote> ~/Remote/Cloud
 
 # mount cloud using rclone with vfs cache flags
-rclone mount --vfs-cache-mode writes <remote> /home/sabit/Remote/Cloud
+rclone mount --vfs-cache-mode writes <remote> ~/Remote/Cloud
 
 # copy files to cloud using rclone
 rclone copy --progress <file> <remote>
