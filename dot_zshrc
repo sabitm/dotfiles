@@ -222,6 +222,8 @@ function yta() {
     mpv --ytdl-format=bestaudio ytdl://ytsearch"$1":"${*:2}"
 }
 
+if [ -e /home/sabit/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sabit/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
 if [[ $TERM == "alacritty" && -z $TMUX ]]; then
     exec tmux
 fi
